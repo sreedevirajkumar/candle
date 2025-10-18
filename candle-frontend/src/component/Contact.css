@@ -1,0 +1,114 @@
+.contact-container {
+  margin: 2px 100px;
+  min-height: 100vh;
+  background: linear-gradient(135deg, lightblue, #d0f0ff);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem 1.5rem;
+  font-family: Arial, sans-serif;
+}
+
+.contact-content {
+  max-width: 1000px;
+  width: 100%;
+}
+
+.contact-title {
+  margin: 30px 10px;
+  font-size: 2.5rem;
+  font-weight: bold;
+  color: #2d2d2d;
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+.contact-text {
+  font-size: 1.125rem;
+  color: #444;
+  text-align: center;
+  margin-bottom: 2.5rem;
+}
+
+.contact-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 20px;
+}
+
+.contact-form,
+.contact-info {
+  background-color: #fffefc; /* same card color */
+  padding: 1.5rem;
+  border-radius: 16px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+  transition: box-shadow 0.3s ease, transform 0.3s ease;
+}
+
+.contact-form:hover,
+.contact-info:hover {
+  box-shadow: 0 6px 16px rgba(0,0,0,0.15);
+  transform: translateY(-4px);
+}
+
+.contact-label {
+  display: block;
+  font-weight: 200;
+  color: #444;
+  margin-bottom: 0.5rem;
+}
+
+.contact-input,
+.contact-textarea {
+  width: 50%;
+  padding: 0.75rem 1rem;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 1rem;
+  outline: none;
+  transition: border 0.3s ease, box-shadow 0.3s ease;
+}
+
+.contact-input:focus,
+.contact-textarea:focus {
+  border-color: #ffb700;
+  box-shadow: 0 0 0 2px rgba(255,183,0,0.3);
+}
+
+.contact-button {
+  width: 100%;
+  background-color: #ff8c00;
+  color: white;
+  padding: 0.75rem;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.2s ease;
+}
+
+.contact-button:hover {
+  background-color: #e67e00;
+  transform: translateY(-2px);
+}
+
+.store-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 1rem;
+}
+
+.store-text {
+  font-size: 1rem;
+  color: #555;
+  margin-bottom: 0.5rem;
+}
+
+/* Responsive */
+@media (min-width: 768px) {
+  .contact-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
