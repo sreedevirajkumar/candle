@@ -1,0 +1,299 @@
+const mailchimp = require("@mailchimp/mailchimp_marketing");
+require("dotenv").config();
+
+// Initialize Mailchimp
+mailchimp.setConfig({
+  apiKey: process.env.MAILCHIMP_API_KEY,
+  server: process.env.MAILCHIMP_SERVER_PREFIX, // e.g., 'us1', 'us2', etc.
+});
+
+/**
+ * Send transactional email using Mailchimp
+ * @param {string} to - Email address of the recipient
+ * @param {string} subject - Subject of the email
+ * @param {string} html - HTML content of the email
+ * @param {string} templateName - Name of the template (optional)
+ */
+async function sendEmail(
+  to,
+  subject,
+  html,
+  templateName = "candle-store-template"
+) {
+  try {
+    // For transactional emails, we'll use Mailchimp's messaging API
+    // This requires a different approach than marketing campaigns
+
+    // Alternative: Use Mailchimp's Transactional API (Mandrill)
+    // For now, let's create a simple HTTP-based solution using Mailchimp's API
+
+    const response = await fetch(
+      `https://${process.env.MAILCHIMP_SERVER_PREFIX}.api.mailchimp.com/3.0/messages`,
+      {
+        method: "POST",
+        headers: {
+          Authorization: `apikey ${process.env.MAILCHIMP_API_KEY}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          message: {
+            to: [{ email: to }],
+            subject: subject,
+            html: html,
+            from_email:
+              process.env.MAILCHIMP_FROM_EMAIL || "noreply@yourdomain.com",
+            from_name: process.env.MAILCHIMP_FROM_NAME || "Candle Store",
+          },
+          async: false,
+        }),
+      }
+    );
+
+    if (response.ok) {
+      console.log(`✅ Mailchimp email sent to: ${to}`);
+      return { success: true, message: "Email sent successfully" };
+    } else {
+      const errorData = await response.json();
+      console.error("❌ Mailchimp API error:", errorData);
+      throw new Error(
+        `Mailchimp API error: ${errorData.detail || "Unknown error"}`
+      );
+    }
+  } catch (error) {
+    console.error("❌ Error sending Mailchimp email:", error);
+    throw error;
+  }
+}
+
+/**
+ * Send order confirmation email to customer
+ * @param {Object} orderData - Order information
+ */
+async function sendOrderConfirmation(orderData) {
+  const {
+    name,
+    email,
+    orderId,
+    cartItems,
+    totalAmount,
+    paymentVerified,
+    paymentReference,
+  } = orderData;
+
+  const subject = `🕯️ Order Confirmation - ${orderId}`;
+
+  const html = `
+    <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; background-color: #f8f9fa;">
+      <div style="background-color: white; padding: 30px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
+        
+        <!-- Header -->
+        <div style="text-align: center; margin-bottom: 30px;">
+          <h1 style="color: #d4af37; margin: 0; font-size: 28px;">🕯️ Candle Store</h1>
+          <p style="color: #666; margin: 5px 0 0 0;">Your Order Confirmation</p>
+        </div>
+        
+        <!-- Greeting -->
+        <div style="background-color: #f8f9fa; padding: 20px; border-radius: 8px; margin-bottom: 25px;">
+          <h2 style="color: #333; margin: 0 0 10px 0;">Dear ${name},</h2>
+          <p style="color: #555; margin: 0; line-height: 1.5;">Thank you for your order! We have received your payment and your order is being processed.</p>
+        </div>
+        
+        <!-- Order Details -->
+        <div style="background-color: #fff; border: 1px solid #e9ecef; border-radius: 8px; padding: 20px; margin-bottom: 25px;">
+          <h3 style="color: #333; margin: 0 0 15px 0; border-bottom: 2px solid #d4af37; padding-bottom: 10px;">Order Details</h3>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+            <p style="margin: 5px 0;"><strong>Order ID:</strong> ${orderId}</p>
+            <p style="margin: 5px 0;"><strong>Date:</strong> ${new Date().toLocaleDateString()}</p>
+            <p style="margin: 5px 0;"><strong>Payment Status:</strong> ${
+              paymentVerified ? "✅ Verified" : "❌ Not Verified"
+            }</p>
+            ${
+              paymentReference
+                ? `<p style="margin: 5px 0;"><strong>Payment Reference:</strong> ${paymentReference}</p>`
+                : ""
+            }
+          </div>
+        </div>
+        
+        <!-- Order Items -->
+        <div style="background-color: #fff; border: 1px solid #e9ecef; border-radius: 8px; padding: 20px; margin-bottom: 25px;">
+          <h3 style="color: #333; margin: 0 0 15px 0; border-bottom: 2px solid #d4af37; padding-bottom: 10px;">Your Order</h3>
+          <table style="width: 100%; border-collapse: collapse;">
+            <thead>
+              <tr style="background-color: #f8f9fa;">
+                <th style="padding: 12px; text-align: left; border-bottom: 1px solid #dee2e6;">Product</th>
+                <th style="padding: 12px; text-align: center; border-bottom: 1px solid #dee2e6;">Qty</th>
+                <th style="padding: 12px; text-align: right; border-bottom: 1px solid #dee2e6;">Price</th>
+                <th style="padding: 12px; text-align: right; border-bottom: 1px solid #dee2e6;">Total</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${cartItems
+                .map(
+                  (item) => `
+                <tr>
+                  <td style="padding: 12px; border-bottom: 1px solid #dee2e6;">${
+                    item.productName
+                  } - ${item.flavor}</td>
+                  <td style="padding: 12px; text-align: center; border-bottom: 1px solid #dee2e6;">${
+                    item.quantity
+                  }</td>
+                  <td style="padding: 12px; text-align: right; border-bottom: 1px solid #dee2e6;">₹${
+                    item.price
+                  }</td>
+                  <td style="padding: 12px; text-align: right; border-bottom: 1px solid #dee2e6;">₹${
+                    item.price * item.quantity
+                  }</td>
+                </tr>
+              `
+                )
+                .join("")}
+            </tbody>
+            <tfoot>
+              <tr style="background-color: #f8f9fa; font-weight: bold;">
+                <td colspan="3" style="padding: 12px; text-align: right;">Total Amount:</td>
+                <td style="padding: 12px; text-align: right;">₹${totalAmount}</td>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
+        
+        <!-- Status -->
+        <div style="background-color: #d4edda; border: 1px solid #c3e6cb; border-radius: 8px; padding: 20px; margin-bottom: 25px;">
+          <h3 style="color: #155724; margin: 0 0 10px 0;">✅ Order Confirmed!</h3>
+          <p style="color: #155724; margin: 0; line-height: 1.5;">We'll process your order and send you updates soon. You'll receive a tracking number once your order ships.</p>
+        </div>
+        
+        <!-- Footer -->
+        <div style="text-align: center; color: #666; font-size: 14px; border-top: 1px solid #e9ecef; padding-top: 20px;">
+          <p style="margin: 0;">Thank you for choosing Candle Store!</p>
+          <p style="margin: 5px 0 0 0;">If you have any questions, please contact us.</p>
+        </div>
+        
+      </div>
+    </div>
+  `;
+
+  return await sendEmail(email, subject, html);
+}
+
+/**
+ * Send admin notification email
+ * @param {Object} orderData - Order information
+ */
+async function sendAdminNotification(orderData) {
+  const {
+    name,
+    email,
+    phone,
+    address,
+    orderId,
+    cartItems,
+    totalAmount,
+    paymentVerified,
+    paymentReference,
+  } = orderData;
+
+  const subject = `🕯️ New Order Received - ${orderId}`;
+
+  const html = `
+    <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; background-color: #f8f9fa;">
+      <div style="background-color: white; padding: 30px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
+        
+        <!-- Header -->
+        <div style="text-align: center; margin-bottom: 30px;">
+          <h1 style="color: #dc3545; margin: 0; font-size: 28px;">🕯️ New Order Alert</h1>
+          <p style="color: #666; margin: 5px 0 0 0;">Action Required</p>
+        </div>
+        
+        <!-- Customer Info -->
+        <div style="background-color: #f8f9fa; padding: 20px; border-radius: 8px; margin-bottom: 25px;">
+          <h3 style="color: #333; margin: 0 0 15px 0; border-bottom: 2px solid #dc3545; padding-bottom: 10px;">Customer Information</h3>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+            <p style="margin: 5px 0;"><strong>Name:</strong> ${name}</p>
+            <p style="margin: 5px 0;"><strong>Email:</strong> ${email}</p>
+            <p style="margin: 5px 0;"><strong>Phone:</strong> ${phone}</p>
+            <p style="margin: 5px 0;"><strong>Order ID:</strong> ${orderId}</p>
+            <p style="margin: 5px 0;"><strong>Payment Status:</strong> ${
+              paymentVerified ? "✅ Verified" : "❌ Not Verified"
+            }</p>
+            ${
+              paymentReference
+                ? `<p style="margin: 5px 0;"><strong>Payment Reference:</strong> ${paymentReference}</p>`
+                : ""
+            }
+          </div>
+          <div style="margin-top: 15px;">
+            <p style="margin: 5px 0;"><strong>Delivery Address:</strong></p>
+            <p style="margin: 5px 0; padding: 10px; background-color: white; border-radius: 4px; border: 1px solid #dee2e6;">${address}</p>
+          </div>
+        </div>
+        
+        <!-- Order Items -->
+        <div style="background-color: #fff; border: 1px solid #e9ecef; border-radius: 8px; padding: 20px; margin-bottom: 25px;">
+          <h3 style="color: #333; margin: 0 0 15px 0; border-bottom: 2px solid #dc3545; padding-bottom: 10px;">Order Items</h3>
+          <table style="width: 100%; border-collapse: collapse;">
+            <thead>
+              <tr style="background-color: #f8f9fa;">
+                <th style="padding: 12px; text-align: left; border-bottom: 1px solid #dee2e6;">Product</th>
+                <th style="padding: 12px; text-align: center; border-bottom: 1px solid #dee2e6;">Qty</th>
+                <th style="padding: 12px; text-align: right; border-bottom: 1px solid #dee2e6;">Price</th>
+                <th style="padding: 12px; text-align: right; border-bottom: 1px solid #dee2e6;">Total</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${cartItems
+                .map(
+                  (item) => `
+                <tr>
+                  <td style="padding: 12px; border-bottom: 1px solid #dee2e6;">${
+                    item.productName
+                  } - ${item.flavor}</td>
+                  <td style="padding: 12px; text-align: center; border-bottom: 1px solid #dee2e6;">${
+                    item.quantity
+                  }</td>
+                  <td style="padding: 12px; text-align: right; border-bottom: 1px solid #dee2e6;">₹${
+                    item.price
+                  }</td>
+                  <td style="padding: 12px; text-align: right; border-bottom: 1px solid #dee2e6;">₹${
+                    item.price * item.quantity
+                  }</td>
+                </tr>
+              `
+                )
+                .join("")}
+            </tbody>
+            <tfoot>
+              <tr style="background-color: #f8f9fa; font-weight: bold;">
+                <td colspan="3" style="padding: 12px; text-align: right;">Total Amount:</td>
+                <td style="padding: 12px; text-align: right;">₹${totalAmount}</td>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
+        
+        <!-- Action Required -->
+        <div style="background-color: #fff3cd; border: 1px solid #ffeaa7; border-radius: 8px; padding: 20px; margin-bottom: 25px;">
+          <h3 style="color: #856404; margin: 0 0 10px 0;">⚠️ Action Required</h3>
+          <p style="color: #856404; margin: 0; line-height: 1.5;">Please process this order and update the customer with tracking information once shipped.</p>
+        </div>
+        
+        <!-- Footer -->
+        <div style="text-align: center; color: #666; font-size: 14px; border-top: 1px solid #e9ecef; padding-top: 20px;">
+          <p style="margin: 0;">Candle Store Admin Panel</p>
+          <p style="margin: 5px 0 0 0;">Order received at ${new Date().toLocaleString()}</p>
+        </div>
+        
+      </div>
+    </div>
+  `;
+
+  const adminEmail = process.env.ADMIN_EMAIL || "sreedevirajkumar03@gmail.com";
+  return await sendEmail(adminEmail, subject, html);
+}
+
+module.exports = {
+  sendEmail,
+  sendOrderConfirmation,
+  sendAdminNotification,
+};
