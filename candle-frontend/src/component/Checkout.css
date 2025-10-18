@@ -1,70 +1,385 @@
-body {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 100vh;
-  margin: 0;
-  font-family: Arial, sans-serif;
-  background: linear-gradient(135deg, lightblue, #d0f0ff);
-  width: 100%;
-}
-
+/* Modern Checkout Page Styles */
 .checkout-container {
-  width: 100%;
-  max-width: 400px;   /* smaller width for balance */
-  padding: 24px;
-  background-color: #fff9f3;
-  border-radius: 10px;
-  box-shadow: 0 0 14px rgba(0, 0, 0, 0.1);
-  animation: fadeIn 0.6s ease-in-out;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
+  min-height: 100vh;
+  background: #fafafa;
+  padding: 120px 0 80px;
 }
 
 .checkout-container h2 {
   text-align: center;
-  margin-bottom: 24px;
-  color:#000000;
+  font-size: clamp(2.5rem, 5vw, 3.5rem);
+  font-weight: 700;
+  color: #333;
+  margin-bottom: 3rem;
 }
 
 .checkout-form {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
+  max-width: 800px;
+  margin: 0 auto;
+  background: #fff;
+  border-radius: 20px;
+  padding: 3rem;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+  border: 1px solid rgba(0, 0, 0, 0.05);
 }
 
-.checkout-form label {
+/* Order Summary */
+.order-summary {
+  background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+  padding: 2rem;
+  border-radius: 16px;
+  margin-bottom: 2rem;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.order-summary h3 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+.order-item {
   display: flex;
-  flex-direction: column;
-  font-size: 16px;
-  color: #444;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 0;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.order-item:last-child {
+  border-bottom: none;
+}
+
+.order-total {
+  margin-top: 1.5rem;
+  padding-top: 1.5rem;
+  border-top: 2px solid #d4af37;
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #333;
+  text-align: center;
+}
+
+/* Form Styles */
+.checkout-form label {
+  display: block;
+  font-size: 1rem;
+  font-weight: 500;
+  color: #333;
+  margin-bottom: 0.5rem;
 }
 
 .checkout-form input,
-.checkout-form select {
-  padding: 8px;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  margin-top: 4px;
+.checkout-form select,
+.checkout-form textarea {
+  width: 100%;
+  padding: 14px 16px;
+  border: 2px solid #e0e0e0;
+  border-radius: 12px;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  background: #fff;
 }
 
-.checkout-form button {
-  padding: 10px;
-  background-color:#000000;
+.checkout-form input:focus,
+.checkout-form select:focus,
+.checkout-form textarea:focus {
+  outline: none;
+  border-color: #d4af37;
+  box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.1);
+}
+
+.checkout-form textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
+/* GPay Section */
+.gpay-section {
+  margin-top: 2rem;
+  padding: 2rem;
+  background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+  border-radius: 16px;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.gpay-section p {
+  font-size: 1.1rem;
+  color: #333;
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+.gpay-btn {
+  background: linear-gradient(135deg, #4285f4, #3367d6);
   color: white;
   border: none;
-  border-radius: 8px;
-  font-size: 16px;
+  padding: 12px 24px;
+  border-radius: 12px;
+  font-size: 1rem;
+  font-weight: 600;
   cursor: pointer;
-  margin-top: 12px;
+  transition: all 0.3s ease;
+  display: block;
+  margin: 0 auto;
 }
 
-.checkout-form button:hover {
-  background-color:  #00ffd0;
+.gpay-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(66, 133, 244, 0.3);
 }
 
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(20px); }
-  to { opacity: 1; transform: translateY(0); }
+.qr-code-section {
+  margin-top: 2rem;
+  text-align: center;
+  padding: 2rem;
+  background: #fff;
+  border-radius: 16px;
+  border: 2px solid #e0e0e0;
+}
+
+.qr-code {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 2rem;
+}
+
+.payment-details {
+  background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+  padding: 1.5rem;
+  border-radius: 12px;
+  margin-bottom: 1.5rem;
+}
+
+.payment-details p {
+  margin: 0.5rem 0;
+  font-size: 1rem;
+  color: #333;
+}
+
+.payment-details strong {
+  color: #d4af37;
+  font-weight: 700;
+}
+
+.qr-instructions {
+  color: #666;
+  font-size: 1rem;
+  margin-bottom: 1.5rem;
+  line-height: 1.5;
+}
+
+.payment-options {
+  margin-top: 1.5rem;
+}
+
+.payment-options p {
+  margin-bottom: 1rem;
+  color: #333;
+  font-weight: 500;
+}
+
+.upi-pay-btn {
+  background: linear-gradient(135deg, #28a745, #20c997);
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 12px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.upi-pay-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(40, 167, 69, 0.3);
+}
+
+/* Payment Reference Section */
+.payment-reference-section {
+  margin-top: 2rem;
+  padding: 2rem;
+  background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+  border-radius: 16px;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.payment-reference-section label {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 1rem;
+}
+
+.payment-reference-input {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.reference-input {
+  flex: 1;
+  padding: 14px 16px;
+  border: 2px solid #e0e0e0;
+  border-radius: 12px;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+}
+
+.reference-input:focus {
+  outline: none;
+  border-color: #d4af37;
+  box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.1);
+}
+
+.verify-btn {
+  background: linear-gradient(135deg, #007bff, #0056b3);
+  color: white;
+  border: none;
+  padding: 14px 24px;
+  border-radius: 12px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+}
+
+.verify-btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(0, 123, 255, 0.3);
+}
+
+.verify-btn:disabled {
+  background: #6c757d;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+.payment-verified {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 1.5rem;
+  padding: 1.5rem;
+  background: linear-gradient(135deg, #d4edda, #c3e6cb);
+  border: 2px solid #28a745;
+  border-radius: 12px;
+  color: #155724;
+}
+
+.verified-icon {
+  font-size: 1.5rem;
+}
+
+.verified-text {
+  font-weight: 600;
+  font-size: 1.1rem;
+}
+
+/* Submit Button */
+.submit-btn-enabled {
+  background: linear-gradient(135deg, #d4af37, #f4d03f);
+  color: #000;
+  border: none;
+  padding: 16px 32px;
+  border-radius: 12px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-top: 2rem;
+  width: 100%;
+  box-shadow: 0 4px 15px rgba(212, 175, 55, 0.3);
+}
+
+.submit-btn-enabled:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(212, 175, 55, 0.4);
+}
+
+.submit-btn-disabled {
+  background: #6c757d;
+  color: white;
+  border: none;
+  padding: 16px 32px;
+  border-radius: 12px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: not-allowed;
+  margin-top: 2rem;
+  width: 100%;
+}
+
+/* Error Styles */
+.error {
+  color: #e74c3c;
+  font-size: 0.9rem;
+  margin-top: 0.5rem;
+  font-weight: 500;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .checkout-container {
+    padding: 100px 0 60px;
+  }
+
+  .checkout-form {
+    margin: 0 1rem;
+    padding: 2rem;
+  }
+
+  .order-summary {
+    padding: 1.5rem;
+  }
+
+  .gpay-section,
+  .payment-reference-section {
+    padding: 1.5rem;
+  }
+
+  .qr-code-section {
+    padding: 1.5rem;
+  }
+
+  .payment-reference-input {
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .verify-btn {
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .checkout-form {
+    margin: 0 0.5rem;
+    padding: 1.5rem;
+  }
+
+  .order-summary,
+  .gpay-section,
+  .payment-reference-section,
+  .qr-code-section {
+    padding: 1rem;
+  }
+
+  .checkout-form input,
+  .checkout-form select,
+  .checkout-form textarea {
+    padding: 12px 14px;
+  }
+
+  .gpay-btn,
+  .upi-pay-btn,
+  .verify-btn {
+    padding: 12px 20px;
+    font-size: 0.95rem;
+  }
 }
