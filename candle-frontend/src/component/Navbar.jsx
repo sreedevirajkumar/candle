@@ -16,7 +16,6 @@ const Navbar = ({ cartCount = 0 }) => {
           <span className="brand-icon">🕯️</span>
           <span className="brand-text">Glint</span>
         </Link>
-
         <div className={`navbar-menu ${isMenuOpen ? "active" : ""}`}>
           <ul className="navbar-links">
             <li>
@@ -40,7 +39,12 @@ const Navbar = ({ cartCount = 0 }) => {
                 className="cart-link"
                 onClick={() => setIsMenuOpen(false)}
               >
-                <span className="cart-icon">🛒</span>
+                <img
+                  src="/images/cart.png"
+                  alt="Cart"
+                  className="cart-icon-img"
+                  onError={(e) => { e.currentTarget.style.display = 'none'; }}
+                />
                 <span className="cart-text">Cart</span>
                 {cartCount > 0 && (
                   <span className="cart-badge">{cartCount}</span>
@@ -49,7 +53,6 @@ const Navbar = ({ cartCount = 0 }) => {
             </li>
           </ul>
         </div>
-
         <button
           className={`navbar-toggle ${isMenuOpen ? "active" : ""}`}
           onClick={toggleMenu}
@@ -65,3 +68,6 @@ const Navbar = ({ cartCount = 0 }) => {
 };
 
 export default Navbar;
+
+
+

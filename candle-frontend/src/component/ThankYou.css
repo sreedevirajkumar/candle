@@ -9,6 +9,32 @@
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   animation: fadeIn 1s ease-in-out;
 }
+
+@media (max-width: 768px) {
+  .thankyou-container {
+    margin: 80px 16px;
+    padding: 28px;
+  }
+  .thankyou-container h2 {
+    font-size: 26px;
+  }
+  .thankyou-container p {
+    font-size: 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .thankyou-container {
+    margin: 70px 12px;
+    padding: 22px;
+  }
+  .thankyou-container h2 {
+    font-size: 22px;
+  }
+  .thankyou-container p {
+    font-size: 15px;
+  }
+}
 .success-icon {
   width: 70px;
   height: 70px;

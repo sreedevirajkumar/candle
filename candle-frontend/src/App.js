@@ -1,12 +1,12 @@
 import React, { useState } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Navbar from "./component/Navbar";
-import ProductList from "./component/Productlist";
-import Cart from "./component/Cart";
-import Checkout from "./component/Checkout";
-import ThankYou from "./component/Thankyou";
-import About from "./component/About";
-import Contact from "./component/Contact";
+import Navbar from "./component/Navbar.jsx";
+import ProductList from "./component/Productlist.jsx";
+import Cart from "./component/Cart.jsx";
+import Checkout from "./component/Checkout.jsx";
+import ThankYou from "./component/Thankyou.js";
+import About from "./component/About.jsx";
+import Contact from "./component/Contact.jsx";
 
 const App = () => {
   const [quantities, setQuantities] = useState({});
